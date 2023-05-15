@@ -1,0 +1,52 @@
+﻿@page "/"
+@using BestMoviesApp.Models
+@using BestMoviesApp.Services
+@inject IMovieService service
+
+<h1>Hello, movies of the world!</h1>
+
+<div class="row">
+	<label for="MovieId" class="col-4 col-form-label">Movie Id</label>
+	<div class="col-8">
+		<input id="MovieId" name="Movie Id" type="integer" class="form-control" @bind="@movieId">
+	</div>
+</div>
+<div class="form-group row">
+	<div class="offset-4 col-8">
+		<button name="submit" type="submit" class="btn btn-primary" @onclick="GetMovieDetails">get movie details</button>
+	</div>
+</div>
+<p>
+	<img src="@(movie?.Url)" alt="">
+</p>
+
+<div class="row">
+	<label for="Rate" class="col-4 col-form-label">Rate Movie</label>
+	<div class="col-8">
+		<input id="Rate" name="Rate Movie" type="double" class="form-control" @bind="@rate">
+	</div>
+</div>
+<div class="form-group row">
+	<div class="offset-4 col-8">
+		<button name="submit" type="submit" class="btn btn-primary" @onclick="RateMovie">Rate movie</button>
+	</div>
+</div>
+
+@code {
+    private long movieId = 2911666;
+    private double rate = 0;
+    private Movie? movie = new();
+
+    private async Task GetMovieDetails()
+    {
+        movie = await service.GetMovieDetails(movieId);
+    }
+    
+    private async Task RateMovie()
+    {
+	    await service.RateMovie(new Rate { MovieId = movieId, Rating = rate });
+    }
+    
+    
+
+}
